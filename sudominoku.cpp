@@ -142,7 +142,7 @@ void Go(int now)
     }
 }
 
-// 가능한 짝을 만들어내는 함수
+// 가능한 도미노 쌍을 만들어내는 함수
 void pair_maker(int pair_now, int zero_now)
 {
     if (all_stop == true)
