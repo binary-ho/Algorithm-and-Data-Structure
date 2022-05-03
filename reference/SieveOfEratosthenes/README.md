@@ -4,7 +4,7 @@
 소수를 찾는 알고리즘이다. 마치 체에 식재료를 걸러 내듯이, 소수가 아닌 숫자들만 체에 걸러낸다.    
 찾고 싶은 범위의 상한을 N이라고 할 떄, 2부터 N의 제곱근까지 수행한다.    
 
-각 숫자의 제곱 부터 시작한다. 예를 들며 2의 차례면 4, N의 제곱근의 차례면 <img src="https://render.githubusercontent.com/render/math?math=$\sqrt{N}$" width="40%" height="30%">정수로 내림한 수의 제곱이 되겠다.
+각 숫자의 제곱 부터 시작한다. 예를 들며 2의 차례면 4, N의 제곱근의 차례면 <img src="https://render.githubusercontent.com/render/math?math=$\sqrt{N}$" width="3%" height="3%">정수로 내림한 수의 제곱이 되겠다.
 이떄의 숫자를 i, 그리고 j는 i의 제곱 i*i부터 N까지라고 하겠다.    
 j에 계속해서 i를 더해준 다음 새로운 j를 체크해준다.
 그러면 i*i 부터 i의 배수들을 모두 체크하는 것이다.
