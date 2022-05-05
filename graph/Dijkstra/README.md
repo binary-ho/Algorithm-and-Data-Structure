@@ -25,7 +25,7 @@ while (!que.empty()) {
     for (int i = 0; i < vec[node_now].size(); i++) {
         int next_node = vec[node_now][i].first;
         int cost_now = vec[node_now][i].second;
-        if (dist[next_node] < dist_now + cost_now) continue;
+        if (dist[next_node] <= dist_now + cost_now) continue; //  이 부분 실수하기 쉬움 조심 메모리 초과 나온다.
         dist[next_node] = dist_now + cost_now;
         que.push({-dist[next_node], next_node});
     }
