@@ -14,42 +14,37 @@ Knuth-Morris-Pratt Algorithm은 문자열 알고리즘에서 가장 유명한 �
 
 ```c++
 int pi[1000001];
-int begin = 1, matched = 0;
-    
-    string S, P;  // 원본 문자열이 S, 비교할 문자열이 P
-    // 부분 일치 테이블 생성
-    while (begin + matched < P.size()) {
-        if (P[begin + matched] == P[matched]) {
-            ++matched;
-            pi[begin + matched - 1] = matched;
-        }
-        else {
-            if (matched == 0) {
-                begin++;
-			}
-			else {
-				begin += matched - pi[matched - 1];
-				matched = pi[matched - 1];
-			}
+string S, P;  // 원본 문자열이 S, 비교할 문자열이 P
+// 부분 일치 테이블 생성   
+while (begin + matched < P.size()) {
+    if (P[begin + matched] == P[matched]) {
+        ++matched;
+        pi[begin + matched - 1] = matched;
+    } else {
+        if (matched == 0) {
+            begin++;
+        } else {
+            begin += matched - pi[matched - 1];
+            matched = pi[matched - 1];
         }
     }
+}
 
-    begin = 0, matched = 0;
-    while (begin + P.size() <= S.size()) {
-        if (matched < P.size() && S[begin + matched] == P[matched]) {
-            ++matched;
-            if (matched == P.size()) {
-                cout << "1"; return 0;
-            }
+begin = 0, matched = 0;
+while (begin + P.size() <= S.size()) {
+    if (matched < P.size() && S[begin + matched] == P[matched]) {
+        ++matched;
+        if (matched == P.size()) {
+            cout << "1";
+            return 0;
         }
-        else {
-            if (matched == 0) {
-                begin++;
-            }
-            else {
-                begin += matched - pi[matched - 1];
-                matched = pi[matched - 1];
-            }
+    } else {
+        if (matched == 0) {
+            begin++;
+        } else {
+            begin += matched - pi[matched - 1];
+            matched = pi[matched - 1];
         }
     }
+}
 ```
