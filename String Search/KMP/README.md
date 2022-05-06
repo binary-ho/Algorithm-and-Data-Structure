@@ -1,0 +1,47 @@
+KMP 알고리즘
+===
+Knuth-Morris-Pratt Algorithm은 문자열 알고리즘에서 가장 유명한 알고리즘으로, 단순히 어떤 문자열을 검색한다고 생각 했을 때와 같이, 하나 하나 문자들이 일치하는지 확인한다.    
+다만, 원본 문자열의 어떤 부분에서 비교 문자열의 비교가 끝났을 떄, 원본 문자열의 바로 다음 문자에서 다시 세는 것이 아니라, 확실히 일치하지 않을 것으로 기대되는 부분을 건너 뛰고 시작합니다.    
+말을 너무 이해하기 어렵게 했습니다. **문자를 하나 하나 비교하며 얻는 정보들을 이용하여 무조건 아닐 부분은 전부 건너 뛰고 다음 탐색을 시작하는 것입니다.**
+
+```c++
+int pi[1000001];
+int begin = 1, matched = 0;
+    
+    string S, P;  // 원본 문자열이 S, 비교할 문자열이 P
+    // 부분 일치 테이블 생성
+    while (begin + matched < P.size()) {
+        if (P[begin + matched] == P[matched]) {
+            ++matched;
+            pi[begin + matched - 1] = matched;
+        }
+        else {
+            if (matched == 0) {
+                begin++;
+			}
+			else {
+				begin += matched - pi[matched - 1];
+				matched = pi[matched - 1];
+			}
+        }
+    }
+
+    begin = 0, matched = 0;
+    while (begin + P.size() <= S.size()) {
+        if (matched < P.size() && S[begin + matched] == P[matched]) {
+            ++matched;
+            if (matched == P.size()) {
+                cout << "1"; return 0;
+            }
+        }
+        else {
+            if (matched == 0) {
+                begin++;
+            }
+            else {
+                begin += matched - pi[matched - 1];
+                matched = pi[matched - 1];
+            }
+        }
+    }
+```
