@@ -15,7 +15,9 @@ Knuth-Morris-Pratt Algorithm은 문자열 알고리즘에서 가장 유명한 �
 ```c++
 int pi[1000001];
 string S, P;  // 원본 문자열이 S, 비교할 문자열이 P
-// 부분 일치 테이블 생성   
+// 부분 일치 테이블 생성
+
+int begin = 1, matched = 0;
 while (begin + matched < P.size()) {
     if (P[begin + matched] == P[matched]) {
         ++matched;
