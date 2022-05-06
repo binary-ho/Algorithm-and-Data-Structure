@@ -37,7 +37,7 @@ while (begin + P.size() <= S.size()) {
     if (matched < P.size() && S[begin + matched] == P[matched]) {
         ++matched;
         if (matched == P.size()) {
-            cout << "1";
+            // 문자열 P를 찾은 상황! 이때 종료합니다.
             return 0;
         }
     } else {
@@ -50,3 +50,10 @@ while (begin + P.size() <= S.size()) {
     }
 }
 ```
+
+
+
+
+참고
+===
+알고리즘 문제해결 전략 <구종만 저>
