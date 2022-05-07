@@ -22,7 +22,7 @@ struct TrieNode
 	TrieNode* children[C_SIZE];
 
 	TrieNode() {
-		keyNum = -1;
+		keyNum = -1;	// keyNum인 이유는 각 문자열이 몇번째 문자열인지 저장해주려는 의도. 나만의 활용법.
 		memset(children, 0, sizeof(children));
 	}
 	~TrieNode() {
@@ -50,7 +50,7 @@ struct TrieNode
 		if (children[next] == nullptr) return nullptr;
 		return children[next]->find(key + 1);
 	}
-};
+} root;
 
 ```
 1. keyNum가 문자열의 끝인지 구분을 위한 변수.
