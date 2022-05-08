@@ -74,6 +74,7 @@ void trieBfs(TrieNode *root) {
 
 탐색은 아래와 같다.
 <br/>
+
 ```c++
 vector<pair<int, int>> ahoCorasick(const string &str, TrieNode *root) {
     vector<pair<int, int>> vec;
@@ -98,6 +99,7 @@ vector<pair<int, int>> ahoCorasick(const string &str, TrieNode *root) {
 
 보기 좋게 전체 코드도 첨부하겠다.
 <br/>
+
 ```C++
 #define C_SIZE 26
 using namespace std;
