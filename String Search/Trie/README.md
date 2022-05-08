@@ -12,10 +12,8 @@
 ## 1. 정석적인 트라이
 ```c++
 #define C_SIZE 26
-#define MAXN 5000001
 using namespace std;
 int toNum(char c) { return c - 'a'; }
-int trieCnt, keyCnt;
 struct TrieNode
 {
 	int keyNum;
