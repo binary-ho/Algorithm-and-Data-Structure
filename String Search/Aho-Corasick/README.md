@@ -34,6 +34,7 @@ struct TrieNode
 ```
 위와 같이 조금의 추가를 해줍니다.       
 실패 함수의 계산은 루트 부터 탐색하는 bfs로 구현됩니다.
+<br/>
 
 ```C++
 void trieBfs(TrieNode *root) {
@@ -72,6 +73,7 @@ void trieBfs(TrieNode *root) {
 ```
 
 탐색은 아래와 같다.
+<br/>
 ```c++
 vector<pair<int, int>> ahoCorasick(const string &str, TrieNode *root) {
     vector<pair<int, int>> vec;
@@ -95,6 +97,7 @@ vector<pair<int, int>> ahoCorasick(const string &str, TrieNode *root) {
 ```
 
 보기 좋게 전체 코드도 첨부하겠다.
+<br/>
 ```C++
 #define C_SIZE 26
 using namespace std;
@@ -179,7 +182,7 @@ vector<pair<int, int>> ahoCorasick(const string &str, TrieNode *root) {
 ```
 
 
-
+<br/><br/>
 ## 부분 문자열 찾기 예외 상황
 [[백준 9250번] 문자열 집합 판별](https://www.acmicpc.net/problem/9250) 문제에서 발견한 예외 상황이다.
 짚더미 문자열의 부분 문자열이 바늘 배열에 존재하는가 찾는 문제에서, 어떤 노드의 실패 노드가 완성된 문자열라면, 해당 노드에서도 이를 알게 해줘야 한다.
