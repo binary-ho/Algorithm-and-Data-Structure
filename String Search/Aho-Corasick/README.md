@@ -103,6 +103,7 @@ int toNum(char c) { return c - 'a'; }
 char str_arr[10001];
 string str;
 
+
 struct TrieNode
 {
     bool terminal = false;  // 터미널로 구현한 버젼
@@ -129,6 +130,7 @@ struct TrieNode
     }
 };
 
+
 void trieBfs(TrieNode *root) {
     root->fail = root;
 
@@ -153,6 +155,7 @@ void trieBfs(TrieNode *root) {
     }
 }
 
+
 vector<pair<int, int>> ahoCorasick(const string &str, TrieNode *root) {
     vector<pair<int, int>> vec;
     TrieNode *state = root;
@@ -172,6 +175,7 @@ vector<pair<int, int>> ahoCorasick(const string &str, TrieNode *root) {
     }
     return vec;
 }
+
 ```
 
 
@@ -205,6 +209,7 @@ queue<TrieNode*> que;
             que.push(next_node);
         }
     }
+    
     
 ... 생략 ...
 ```
