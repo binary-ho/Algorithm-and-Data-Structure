@@ -123,6 +123,12 @@ int main() {
 
 ```c++
 char str[10001];
-printf("%s", str.c_str());
+scanf("%s", str);
 ```
 <br/><br/>
+# 8. printf로 stirng 출력하기
+
+```c++
+printf("%s", str.c_str());
+```
+위와 같이 꼭 string에 c_str함수를 적용해 주어야 한다.
