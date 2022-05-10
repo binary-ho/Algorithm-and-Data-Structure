@@ -108,3 +108,5 @@ bool insert(TrieNode &trieNode, const char* key) {
 
 관련 문제과 코드를 첨부한다 참고하자.
 
+[[백준 13505] 두 수 XOR](https://www.acmicpc.net/problem/13505)
+
