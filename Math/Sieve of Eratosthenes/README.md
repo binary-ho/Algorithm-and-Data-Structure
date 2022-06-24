@@ -28,7 +28,8 @@ set<int> getPrimeSet(int N) {
     for(int i = 2; i <= N; i++) if(!check[i]) ans.insert(i);
     return ans;
 }
-
+```
+```C++
 vector<int> getPrimeVector(int N) {
     int N2 = (int) sqrt(N);
     vector<bool> check(N+1, false);
@@ -40,6 +41,17 @@ vector<int> getPrimeVector(int N) {
     vector<int> ans;
     for(int i = 2; i <= N; i++) if(!check[i]) ans.emplace_back(i);
     return ans;
+}
+```
+```C++
+void getPrimeVector(int N, vector<int> &vec) {
+    int N2 = (int) sqrt(N);
+    vector<bool> check(N+1, false);
+    for(int i = 2; i <= N2; i++) {
+        if(check[i]) continue;
+        for(int j = i*i; j <= N; j += i) { check[j] = true; }
+    }
+    for(int i = 2; i <= N; i++) if(!check[i]) vec.emplace_back(i);
 }
 ```
 
