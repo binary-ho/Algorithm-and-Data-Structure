@@ -12,7 +12,7 @@ j에 계속해서 i를 더해주며 숫자들을 지워나가면, i의 제곱 �
 이렇게 체크해 놓은 수들의 나머지 숫자들이 소수가 되겠다. 왜냐하면 소수는 1보다 큰 자연수 중에서 1과 자신만을 약수로 가지는 수들이기 때문이다. <br> 
 간단한 알고리즘이지만 자주 이용하므로 한번 정리해 보았다.
 
-아래는 원하는 범위까지의 소수들을 담은 set을 만드는 메서드이다. 원하는 대로 변형해서 쓰면 되겠다.
+아래는 원하는 범위까지의 소수들을 담은 set과 vector를 만드는 메서드이다. 원하는 대로 변형해서 쓰면 되겠다.
 ```C++
 set<int> getPrimeSet(int N) {
     int N2 = (int) sqrt(N);
@@ -26,6 +26,19 @@ set<int> getPrimeSet(int N) {
 
     set<int> ans;
     for(int i = 2; i <= N; i++) if(!check[i]) ans.insert(i);
+    return ans;
+}
+
+vector<int> getPrimeVector(int N) {
+    int N2 = (int) sqrt(N);
+    vector<bool> check(N+1, false);
+    for(int i = 2; i <= N2; i++) {
+        if(check[i]) continue;
+        for(int j = i*i; j <= N; j += i) { check[j] = true; }
+    }
+
+    vector<int> ans;
+    for(int i = 2; i <= N; i++) if(!check[i]) ans.emplace_back(i);
     return ans;
 }
 ```
