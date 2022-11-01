@@ -80,6 +80,8 @@ line of sight는 가시선으로 직역할 수 있다. 세타 스타에서 후�
 Theta\*에서는 이를 탐색하며 바로 바로 적용하기 보다는, 이미 만들어진 경로에서, **부모 노드가 현재 탐색중인 다음 노드를 가리는 장애물 없이 볼 수 있다면, 다음 노드까지 현재 노드에서 출발하지 말고 부모 노드에서 출발하도록 한다.** <br>
 즉, **후처리이다.** 이러한 수행이 연속해서 계속 이루어지면, 
 ![theta 3](https://user-images.githubusercontent.com/71186266/199240769-bf9a957c-c2ca-4899-ba6f-a5af9d1079fb.png)
+(출처 [1]) <br>
+
 검은색으로 되어 있는 경로들이 점점 노란색 경로로 바뀌게 되는 것이다. <br>
 
 오른쪽 그림은 몇 개의 검은 점이 있고, 이를 노란색으로 바로 잇는다. 저 검은 점과 점 사이에는 원래 A star와 유사한 경로가 형성되어 있었을 것이다. 이를 후처리를 통해 지워나간 것이다.
@@ -128,6 +130,7 @@ function update_vertex(s, neighbor)
                 open.remove(neighbor)
             open.insert(neighbor, gScore(neighbor) + heuristic(neighbor))
 ```
+(출처 - 위키피디아 Theta*) <br>
 
 전체적으로는 A star와 그 진행이 유사하다. 우선순위 큐 open과 방문 체크 배열 closed를 이용해 다익스트라를 진행한다. <br>
 
