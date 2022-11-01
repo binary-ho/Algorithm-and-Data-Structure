@@ -143,8 +143,8 @@ line_of_sight가 false일 경우 노드를 넣기 전 A star와 같이 휴리스
 ![comparison](https://user-images.githubusercontent.com/71186266/199248565-803681b6-96e2-4f5d-acc0-5ef2d00c01f5.png)
 (출처: [1])
 ## Reference
-[1] Applying Theta* in Modern Game <Hoa Nguyen, Nguyen Truong, Chinho Park, Wonshoup So, Lee Ki-Dong>
-[2] [Line-of-Sight Slider (LoSS) Smoothing <Nickson Joram>](https://medium.com/nerd-for-tech/line-of-sight-slider-loss-smoothing-5ee2c90af58d)
-[3] [Theta* - Wikipedia](https://en.wikipedia.org/wiki/Theta*)
-[4] [A* - Wikipedia](https://en.wikipedia.org/wiki/A*_search_algorithm)
-[5] 게임 리그오브레전드
+[1] Applying Theta* in Modern Game <Hoa Nguyen, Nguyen Truong, Chinho Park, Wonshoup So, Lee Ki-Dong> <br> 
+[2] [Line-of-Sight Slider (LoSS) Smoothing <Nickson Joram>](https://medium.com/nerd-for-tech/line-of-sight-slider-loss-smoothing-5ee2c90af58d) <br> 
+[3] [Theta* - Wikipedia](https://en.wikipedia.org/wiki/Theta*) <br> 
+[4] [A* - Wikipedia](https://en.wikipedia.org/wiki/A*_search_algorithm) <br> 
+[5] 게임 리그오브레전드 <br> 
