@@ -90,7 +90,49 @@ A* 알고리즘에 대해 최대한 요약해보겠다.
 
 다익스트라에서 확장된 A* 알고리즘은 노드가 아주 많은 상황에서 아주 멋진 움직임을 보인다. 주로 예전의 게임들에서 많이 사용했는데, 스타크래프트 1에서 사용된 것으로 추측된다. 유닛을 특정 위치로 찍은 경우, 길을 막는 유닛이 없어 이동할 수 있다면, A\* 연산을 실행하여 최단거리를 계산하고 이동하는 것으로 추측된다. 전략적인 이동도 가능하다. 지형들에게 가중치를 주어, `벽과 떨어져 가시오`, `웬만하면 물 위로는 가지 마시오` 등의 전략 부여도 가능하다! 
 
-## 5. 현실 세계에선?
+## 5. 수도 코드 분석
+간단한 형태의 수도 코드를 분석해 보겠다.
+```cpp
+// A* finds a path from start to goal.
+function A_Star(start, goal, h)
+  openSet := {start}
+
+  cameFrom := an empty map
+
+  gScore := map with default value of Infinity
+  gScore[start] := 0
+
+  // For node n, fScore[n] := gScore[n] + h(n). fScore[n]
+  fScore := map with default value of Infinity
+  fScore[start] := h(start)
+
+  while openSet is not empty
+      current := the node in openSet having the lowest fScore[] value
+      if current = goal
+          return reconstruct_path(cameFrom, current)
+
+      openSet.Remove(current)
+      for each neighbor of current
+          tentative_gScore := gScore[current] + d(current, neighbor)
+          if tentative_gScore < gScore[neighbor]
+              cameFrom[neighbor] := current
+              gScore[neighbor] := tentative_gScore
+              fScore[neighbor] := tentative_gScore + h(neighbor)
+              if neighbor not in openSet
+                  openSet.add(neighbor)
+
+  return failure
+```
+                                                
+1. openSet은 힙으로 구현된 자료구조. 휴리스틱이 포함된 값들이 들어가게 된다.
+2. gScore은 휴리스틱이 포함되지 않은 거리의 기록, fScore은 휴리스틱이 포함된 거리를 기록한다.
+3. cameForm은 경로 역추적을 위해 존재. 더 이상 설명 X
+4. 앞서 설명한대로 while문이 openSet이 비어있지 않은 동안 돌아간다
+5. current는 현재 탐색중인 노드로 openSet에서 가장 작은 값을 꺼내온 다음 제거한다. current가 goal 일때 연산 종료
+6. current의 이웃 노드들을 살펴보는데, 실제 거리로 따져서 더 가까운 거리를 알고 있다면, 그 쪽으로 이동한다.
+7. 이동하며 각 배열들에 기록된 값을 갱신하고, 적혀있지 않지만 openSet에는 휴리스틱에 포함된 값을 넣는다.
+                                                
+## 6. 현실 세계에선?
 이렇게 A\*는 다익스트라를 정말 빠르게 계산하였다. 실시간으로 바뀌는 정보를 반영하기 위한 Dynamic A star인 D\*등으로 A\*는 더 강해졌다. <br> 
 그리고 그리드 형태의 부자연스러움을 개선하기 위한 후처리 작업 알고리즘인 Theta*도 제시되었다. <br>
 하지만, 아주 먼 거리에 대해서는 여전히 성능 이슈가 있었고, 무엇 보다도 현실 세계에 적용하기엔 Dijkstra 기반 특성상 1:m의 최단거리 측정만이 가능하다. <br>
