@@ -10,7 +10,12 @@ Algorithm & Data-Structure
 ### 2. 한번 푼 유형은 절대 잊지 않아야 한다.
 ### 3. 한번 공부한 문법도 잊지 않아야 한다.
 
+<br>
 
+
+## 관련 레포지토리
+
+[2학년 2학기 자료구조 수업 레포지토리 바로 가기](https://github.com/binary-ho/TIL-public/tree/main/3%ED%95%99%EB%85%84%202%ED%95%99%EA%B8%B0/Data%20Structure/Home%20works)
 
 <br/><br/>
 
