@@ -316,7 +316,7 @@ void BPlusTree::removeInternal(int K, Node *cursor, Node *child) {
 
     int position;
     for (int i = 0; i < cursor->size; i++) if (cursor->key[i] == K) position = i;
-    // 넣을 곳 찾았으니, 한 칸씩 키 땡겨주면서 자연스럽게 키 값을 지워버린다.
+    //  곳 찾았으니, 한 칸씩 키 땡겨주면서 자연스럽게 키 값을 지워버린다.
     for (int i = position; i < cursor->size; i++) cursor->key[i] = cursor->key[i + 1];
 
     /* 이번엔 포인터 */
