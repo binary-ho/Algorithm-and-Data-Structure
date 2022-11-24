@@ -1,11 +1,11 @@
 # B+Tree
-(작성중 -> remove 구현 예정) <br>
 B+Tree는 DBMS에서 트리 기반 인덱싱에 사용하는 자료구조이다.
 트리 기반 인덱싱과 B+ Tree에 대한 기본 설명은 [이곳을 참고하라.](https://github.com/binary-ho/TIL-public/blob/main/3%ED%95%99%EB%85%84%202%ED%95%99%EA%B8%B0/DB/10.%20%ED%8A%B8%EB%A6%AC%20%EA%B5%AC%EC%A1%B0%20%EC%9D%B8%EB%8D%B1%EC%8B%B1.md) <br> <br>
 
 이 곳에서는 구체적인 코드와 설명을 해보려고 한다. <br>
 여러 사이트를 참고하고, 학교에서 DB 수업을 진행하는 교재의 변수나 제한 사항들을 최대한 살려 보려고 노력했다. <br>
-읽는 사람이 최대한 이해하기 쉽도록 코드를 배치하고 설명하려고 노력했다. 그래도 기본적인 트리 구조나 B+Tree의 흐름에 대한 이해는 있다고 생각하고 설명하였다. <br>
+전체적으로 읽는 사람이 최대한 이해하기 쉽게, 그리고 읽기 좋게, 간단하게 리팩토링 했다. 그리고 각 코드 라인마다 헷갈릴 수 있는 부분은 최대한 설명하려고 노력했다. <br>
+그래도 기본적인 트리 구조나 B+Tree의 흐름에 대한 이해는 있다고 생각하고 설명하였다. <br>
 c++ 컨벤션을 지키려 노력했다.
 
 ## 1. Node class
@@ -254,7 +254,285 @@ Node *BPlusTree::findParent(Node *cursor, Node *childNode) {
 ```
 부모 노드를 찾기 위한 메서드, 주석의 설명이 대부분이다. 아래 부분에서는 재귀적으로 부모 노드를 찾고 있다.
 
-## 7. remove (작성중)
+## 7. B+Tree Remove
+이번엔 노드를 지우는 과정이다.
+1. K값을 가진 말단 노드를 찾는다.
+2. K값을 지운다.
+3. 루트면 끝.
+4. 아닌 경우 포인터도 조정.
+5. 크기가 충분히 작지 않다면! 하한을 넘는다면 그대로 끝!
+6. 아니라면.............
+7. 부모 노드를 찾아 형제 노드를 확보
+8. 왼쪽 형제 노드 먼저 확인을 해서 키 값의 수가 충분히 많다면 그냥 하나 뺏어오고 끝낸다
+9. 아닌 경우 왼쪽 혹은 오른쪽 형제 노드에 몰아준다.
+10. 그러면서 재귀적으로 다시 루트로 타고 올라가며 비단말 노드 remove 연산을 진행해준다.
+
+복잡해 보이지만 실제 코드를 보며 자세한 동작을 보면 더 복잡하다. 확인해보자.
+```cpp
+void BPlusTree::remove(int K) {
+    if (root == nullptr) return;
+    Node *cursor = root;
+    Node *parent;
+    int leftSiblingIdx, rightSiblingIdx;
+
+    /* 일단 루트로 부터 삭제 원소를 찾아 쭉 타고 내려간다. */
+    bool findNext;
+    while (!cursor->isLeaf) {
+        findNext = false;
+        int ptrSize = cursor->size;
+        for (int ptrIdx = 0; ptrIdx < ptrSize; ptrIdx++) {
+            parent = cursor;
+            leftSiblingIdx = ptrIdx - 1;
+            rightSiblingIdx = ptrIdx + 1;
+            if (K < cursor->key[ptrIdx]) {
+                cursor = cursor->ptr[ptrIdx];
+                findNext = true;
+                break;
+            }
+        }
+        if (!findNext) {
+            leftSiblingIdx = ptrSize - 1;
+            rightSiblingIdx = ptrSize + 1;
+            cursor = cursor->ptr[ptrSize];
+        }
+    }
+
+    /* 지우려는 숫자가 말단노드에 존재하지 않다면 종료 */
+    int position = -1;
+    for (int i = 0; i < cursor->size; i++) if (cursor->key[i] == K) position = i;
+    if (position == - 1) return;
+
+    /* 발견했다면, 지우는 작업 시작. 한 칸씩 왼쪽으로 이동 */
+    for (int i = position; i < cursor->size; i++) cursor->key[i] = cursor->key[i + 1];
+    cursor->size--;
+
+    /*
+     * 이제 루트인지 확인하고,
+     * 루트라면 트리 자체를 없애고 끝낸다. (메모리 반환)
+     * 아닐 경우..
+     * */
+    if (cursor == root) {
+        for (int i = 0; i < MAX + 1; i++) cursor->ptr[i] == nullptr;
+        if (cursor->size == 0) {
+            delete[] cursor->key;
+            delete[] cursor->ptr;
+            delete cursor;
+            root = nullptr;
+        }
+        return;
+    }
+
+    /* 값 하나를 삭제했으니 한칸 땡긴다.*/
+    cursor->ptr[cursor->size] = cursor->ptr[cursor->size + 1];
+    cursor->ptr[cursor->size + 1] = nullptr;
+
+    /* 크기가 충분히 작지 않으면 그대로 끝. */
+    if (cursor->size >= (MAX + 1) / 2) return;
+
+    /*
+     * 작은 경우 양 쪽 sibling 노드를 들여다 본다.
+     * 왼쪽 먼저 들여다 보는데, 왼쪽 노드의 크기가 최저 기준 보다 크다면 왼쪽에서 가져온다.
+     * 아닐 경우 오른쪽에서 가져온다.
+     * */
+    Node *leftSibling = leftSiblingIdx >= 0 ? parent->ptr[leftSiblingIdx] : nullptr;
+    if (leftSibling && leftSibling->size >= (MAX + 1) / 2 + 1) {
+        /* 가져온 키를 맨 앞에 붙일 것이므로 자리를 한칸 만든다. */
+        for (int i = cursor->size; i > 0; i--) cursor->key[i] = cursor->key[i - 1];
+        cursor->size++;
+        cursor->ptr[cursor->size] = cursor->ptr[cursor->size - 1];
+        cursor->ptr[cursor->size - 1] = nullptr;
+
+        /* 왼쪽 노드 끝 key를 가져온다. */
+        cursor->key[0] = leftSibling->key[leftSibling->size - 1];
+        leftSibling->size--;
+        leftSibling->ptr[leftSibling->size] = cursor;
+        leftSibling->ptr[leftSibling->size + 1] = nullptr;
+        parent->key[leftSiblingIdx] = cursor->key[0];
+        return;
+    }
+
+    /* 이번엔 오른쪽 */
+    Node *rightSibling = rightSiblingIdx <= parent->size ? parent->ptr[rightSiblingIdx] : nullptr;
+    if (rightSibling && rightSibling->size >= (MAX + 1) / 2 + 1) {
+        /* 오른 쪽에 붙이므로, 자리를 한칸 만들 필요가 없다. */
+        cursor->size++;
+        cursor->ptr[cursor->size] = cursor->ptr[cursor->size - 1];
+        cursor->ptr[cursor->size - 1] = nullptr;
+
+        /* 오른쪽 노드 맨 앞 key를 가져온다. */
+        cursor->key[cursor->size - 1] = rightSibling->key[0];
+        rightSibling->size--;
+
+        rightSibling->ptr[rightSibling->size] = rightSibling->ptr[rightSibling->size + 1];
+        rightSibling->ptr[rightSibling->size + 1] = nullptr;
+        for (int i = 0; i < rightSibling->size; i++) rightSibling->key[i] = rightSibling->key[i + 1];
+        parent->key[rightSiblingIdx - 1] = rightSibling->key[0];
+        return;
+    }
+
+    /*
+     * 오른쪽 왼쪽이 다 최소 노드 갯수만 가지고 있는 경우..
+     * 왼쪽이나 오른 쪽에 현재 노드의 원소들을 전부 옮겨준다!
+     * */
+    if (leftSibling) {
+        /* 키값 모두 옮기고, 맨 끝 포인터 설정 다시 해주기 */
+        for (int i = leftSibling->size, j = 0; j < cursor->size; i++, j++) leftSibling->key[i] = cursor->key[j];
+        leftSibling->ptr[leftSibling->size] = nullptr;
+        leftSibling->size += cursor->size;
+        leftSibling->ptr[leftSibling->size] = cursor->ptr[cursor->size];    // 말단 노드가 가르키던 오른쪽 ptr 가져오기
+
+        // 말단 노드 삭제에 맞춰 비단말 노드에서 기존 노드를 가리키던 엔트리 삭제 확인.
+        removeInternal(parent->key[leftSiblingIdx], parent, cursor);
+
+        // 메모리 반환
+        delete[] cursor->key;
+        delete[] cursor->ptr;
+        delete cursor;
+        return;
+    }
+
+    if (rightSibling) {
+        /* 이번엔 현재 노드에 몰아 넣어주기 */
+        for (int i = cursor->size, j = 0; j < rightSibling->size; i++, j++) cursor->key[i] = rightSibling->key[j];
+        cursor->ptr[cursor->size] = nullptr;
+        cursor->size += rightSibling->size;
+        cursor->ptr[cursor->size] = rightSibling->ptr[rightSibling->size];
+
+        removeInternal(parent->key[rightSiblingIdx - 1], parent, rightSibling);
+        delete[] rightSibling->key;
+        delete[] rightSibling->ptr;
+        delete rightSibling;
+    }
+}
+```
+
+## 8. B+Tree 비단말 노드 remove
+1. 루트인 경우 지우고 끝
+2. 아닌 경우 키 값 지우고, 포인터도 없앤다.
+3. 사이즈를 줄이는데, 이 때 사이즈가 충분히 작지 않다면 그냥 끝낸다
+4. 아닌 경우 부모 노드를 통해 양 옆 형제 노드 찾기
+5. 왼쪽 노드 부터 확인해서 원소 수가 충분하다면 하나 뺏어 오기
+6. 부족한 경우 한 쪽에 몰아주기
+
+이렇게 적으면 쉽지만, 자세한 구동을 주석으로 확인해 보자.
+```cpp
+void BPlusTree::removeInternal(int K, Node *cursor, Node *child) {
+    if (cursor == root && cursor->size == 1) {
+        for (int i = 0; i < 2; i++)
+            if (cursor->ptr[i - 1] == child) {
+                delete[] child->key;
+                delete[] child->ptr;
+                delete child;
+
+                root = cursor->ptr[i];
+
+                delete[] cursor->key;
+                delete[] cursor->ptr;
+                delete cursor;
+                return;
+            }
+    }
+
+
+    int position;
+    for (int i = 0; i < cursor->size; i++) if (cursor->key[i] == K) position = i;
+    // 넣을 곳 찾았으니, 한 칸씩 키 땡겨주면서 자연스럽게 키 값을 지워버린다.
+    for (int i = position; i < cursor->size; i++) cursor->key[i] = cursor->key[i + 1];
+
+    /* 이번엔 포인터 */
+    for (int i = 0; i < cursor->size + 1; i++) if (cursor->ptr[i] == child) position = i;
+    for (int i = position; i < cursor->size + 1; i++) cursor->ptr[i] = cursor->ptr[i + 1];
+
+    /* 사이즈 줄이고 사이즈가 적당하거나, 루트 였다면 이만 끝낸다. */
+    cursor->size--;
+    if (cursor == root || cursor->size >= (MAX + 1) / 2 - 1) return;
+
+    /* 부모와 양 옆 노드 찾기 */
+    Node *parent = findParent(root, cursor);
+    int leftSiblingIdx, rightSiblingIdx;
+    for (int i = 0; i < parent->size + 1; i++) {
+        if (parent->ptr[i] != cursor) continue;
+        leftSiblingIdx = i - 1;
+        rightSiblingIdx = i + 1;
+        position = i;
+        break;
+    }
+
+    /* 왼쪽 자식이 있다면, 원소 하나 뺏어오기 */
+    Node *leftSibling = leftSiblingIdx >= 0 ? parent->ptr[leftSiblingIdx] : nullptr;
+    if (leftSibling && leftSibling->size >= (MAX + 1) / 2 + 1) {
+        /* 가져온 키를 맨 앞에 붙일 것이므로 자리를 한칸 만든다. */
+        for (int i = cursor->size; i > 0; i--) cursor->key[i] = cursor->key[i - 1];
+        cursor->size++;
+
+        /* 여기서 조금 헷갈릴 수 있다.
+         * 현재 노드의 가장 왼쪽은, 부모 노드에서 왼쪽 자식을 가리키던 엔트리의 키값을 놓고,
+         * 부모 노드에서 왼쪽 자식을 가리키던 엔트리의 키값이 있던 부분은
+         * 왼쪽 자식의 가장 큰 값으로 바꾼다. */
+        cursor->key[0] = parent->key[leftSiblingIdx];
+        parent->key[leftSiblingIdx] = leftSibling->key[leftSibling->size - 1];
+
+        /* 포인터도 옮겨 준다. 왼쪽 자식이 현재 노드를 가리키도록 잘 설정 */
+        for (int i = cursor->size + 1; i > 0; i--) cursor->ptr[i] = cursor->ptr[i - 1];
+        cursor->ptr[0] = leftSibling->ptr[leftSibling->size];
+        cursor->size++;
+        leftSibling->size--;
+
+        return;
+    }
+
+    /* 오른쪽 반복 */
+    Node *rightSibling = rightSiblingIdx <= parent->size ? parent->ptr[rightSiblingIdx] : nullptr;
+    if (rightSibling && rightSibling->size >= (MAX + 1) / 2 + 1) {
+        /* 부모 노드에서 현재 노드를 가리키던 엔트리의 키 값을 가져온다.
+         * 그 자리엔 오른쪽 노드의 가장 작은 숫자를 채운다.
+         * */
+        cursor->key[cursor->size] = parent->key[position];
+        parent->key[position] = rightSibling->key[0];
+
+        /* 한 칸씩 땡겨 주면서 자연스럽게 가장 앞쪽 키를 지운다.
+         * */
+        for (int i = 0; i < rightSibling->size - 1; i++) rightSibling->key[i] = rightSibling->key[i + 1];
+        /* 포인터 수정 */
+        cursor->ptr[cursor->size + 1] = rightSibling->ptr[0];
+        for (int i = 0; i < rightSibling->size; i++) rightSibling->ptr[i] = rightSibling->ptr[i + 1];
+
+        cursor->size++;
+        rightSibling->size--;
+        return;
+    }
+
+    /*
+    * 오른쪽 왼쪽 비단말 노드들이 다 원소를 노드 최소 갯수만 가지고 있는 경우.. */
+    if (leftSibling) {
+        /* 단말 노드 때와는 다르다. 또 키값 뺏어 오기*/
+        leftSibling->key[leftSibling->size] = parent->key[leftSiblingIdx];
+
+        for (int i = leftSibling->size + 1, j = 0; j < cursor->size; i++, j++) leftSibling->key[i] = cursor->key[j];
+        for (int i = leftSibling->size + 1, j = 0; j < cursor->size + 1; i++, j++) {
+            leftSibling->ptr[i] = cursor->ptr[j];
+            cursor->ptr[j] = nullptr;
+        }
+        leftSibling->size += cursor->size + 1;
+        cursor->size = 0;
+        removeInternal(parent->key[leftSiblingIdx], parent, cursor);
+        return;
+    }
+
+    if (rightSibling) {
+        cursor->key[cursor->size] = parent->key[rightSiblingIdx - 1];
+
+        for (int i = cursor->size + 1, j = 0; j < rightSibling->size; i++, j++) cursor->key[i] = rightSibling->key[j];
+        for (int i = cursor->size + 1, j = 0; j < rightSibling->size; i++, j++) {
+            cursor->ptr[i] = rightSibling->ptr[j];
+            rightSibling->ptr[j] = nullptr;
+        }
+        cursor->size += rightSibling->size + 1;
+        rightSibling->size = 0;
+        removeInternal(parent->key[rightSiblingIdx - 1], parent, cursor);
+    }
+}
+```
 
 ## Reference
 - Database Management Systems \<Raghu Ramkrishnan 저>
