@@ -1,5 +1,7 @@
 # Heap
-가장 좋아하는 자료구조! 그런데 아직도 Heap에 대해 글을 쓴 적 없다는 사실을 깨달아버렸다. 서운했을 Heap을 위해 부랴부랴 써 본다. <br>
+[전체 코드](https://github.com/binary-ho/Algorithm-and-Data-Structure/blob/main/Heap/heap.cpp)  <br>
+
+내가 가장 좋아하는 자료구조이다! 그런데 아직도 Heap에 대해 글을 쓴 적 없다는 사실을 깨달아버렸다. 이에 서운했을 Heap을 위해 부랴부랴 써 본다. <br>
 Heap은 나같은 사람들에게는 Priority Queue로 먼저 접해봤을 것이다. 이 우선순위 큐는 Heap의 한 종류인데, 큐는 큐인데 들어온 순서가 아닌, 우선순위 대로 정렬 되어 있는 큐이다. <br>
 
 그럼 Heap은 뭘까? Heap은 정해둔 우선순위상 가장 높은 data가 root에 있는 **완전 이진 트리이다.** 우선순위 큐와 조금 다른 점은 내부적으로 우선순위대로 차곡차곡 정렬 되어 있지는 않다. <br>
