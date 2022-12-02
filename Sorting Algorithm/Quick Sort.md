@@ -39,10 +39,10 @@ void quickSort(int *arr, int start, int end){
 
 		if(i>=j) break;
 
-    swap(i, j);
+    swap(arr[i], arr[j]);
 	}
   
-  swap(pivot, j);
+  swap(arr[pivot], arr[j]);
 	
 	quickSort(arr, start, j-1);
 	quickSort(arr, j+1, end);	
