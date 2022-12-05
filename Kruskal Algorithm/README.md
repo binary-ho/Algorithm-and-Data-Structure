@@ -1,7 +1,7 @@
 # Kruskal Algorithm
 크루스칼 알고리즘은 Disjoint Set을 이용한 Union find 알고리즘을 통해 그리디하게 minimum spanning tree를 구성할 수 있는 알고리즘이다. <br>
 
-[Union Find 설명 레포 바로가기] (https://github.com/binary-ho/Algorithm-and-Data-Structure/tree/main/Union%20Find)
+[Union Find 설명 레포 바로가기](https://github.com/binary-ho/Algorithm-and-Data-Structure/tree/main/Union%20Find)
 
 <br>
 
@@ -78,14 +78,14 @@ void kruskal() {
 }
 ```
 
-
 위에서 설명한 것과 같다. 
 1. 모든 노드를 가질 수 있는 disjoint_set을 만든다.
 2. vec이라는 이름의 vector가 모든 간선을 가지고 있다. <br> 앞에서 부터 비용이 적은 순으로 있다고 가정하자.
 3. 모든 간선들을 꺼내서 파인드 연산을 해본다
 4. 간선에 연결된 노드들이 같은 트리 안에 있다면 버린다.
 5. 아닌 경우 합쳐준다
-6. 모든 연산이 끝나면 최소 스패닝 트리가 완성 되어 있음.
+6. 모든 연산이 끝나면 최소 스패닝 트리가 완성 된다!!
+
 
 ## Reference
-- 문제 해결 전략 \<구종만 저>
+- 알고리즘 문제 해결 전략 \<구종만 저>
