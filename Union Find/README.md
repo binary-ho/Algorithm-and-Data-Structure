@@ -1,8 +1,7 @@
 Union Find
 ====
-
-코테 끝나고 자세히 정리하자.    
-**상호 배타적 집합(disjoint set)을 표현할 때 쓰는 자료구조.**    
+ 
+**자료구조 상호 배타적 집합(disjoint set)을 표현할 때 쓰는 알고리즘!.**    
 구성 원소들이 서로 배타적인 부분 집합을 형성하는 것임.    
 즉, 한 그룹에 같은 원소들이 있지 않도록, 한 원소는 한 부분 집합에만 속하도록 만들어 주는 자료구조입니다.    
 
@@ -24,20 +23,24 @@ Union Find
 
 ## 1. 트리로 구현한 Union-Find
 
-- 볼 필요 없지만 경로 압축 X 버전
+- 경로 압축 X 버전
 
 ```C++
 struct DisjointSet {
+    // parent vector는 각 노드들의 부모 노드를 갖습니다 
+    // ex) parent[3] = 4인 경우 3의 부모는 4입니다.
     vector<int> parent;
     DisjointSet(int N): parent(N) {
-        for(int i = 0; i < N; i++) parent[i] = i;
+        for(int i = 0; i < N; i++) parent[i] = i;   // 초기엔 자기 자신을 부모로 갖습니다.
     }
     
     // 원소 u의 최상위 조상을 반환합니다.
     int find(int u) {
-        if(u == parent[u]) return u;
-        return find(parent[u]);
+        return u == parent[u] ? u : find(parent[u]);
     }
+    
+    // 둘의 조상이 같을 경우, 이미 같은 그룹에 있는 걸로 판답합니다. 
+    // 아닌 경우 간단하게 한쪽 트리의 조상이 다른 한쪽을 부모로 설정합니다.
     void merge(int u, int v) {
         u = find(u); v = find(v);
         if(u == v) return;
@@ -52,6 +55,7 @@ struct DisjointSet {
 ### 경로 압축을 적용한 버전!
 ```C++
 struct DisjointSet {
+    // parent는 동일. rank는 트리의 높이를 나타냅니다. 초기값은 1입니다.
     vector<int> parent, rank;
     DisjointSet(int N): parent(N), rank(N, 1){
         for(int i = 0; i < N; i++) parent[i] = i;
@@ -61,16 +65,17 @@ struct DisjointSet {
     int find(int u) {
         if(u == parent[u]) return u;
         return parent[u] = find(parent[u]);
-        // 같은 그룹에 속한 원소들이 자신의 최상위 조상을 기억하게 해줌
+        // 같은 그룹에 속한 원소들이 모두 자신의 최상위 조상을 가리키게 한다.
     }
+    
     void merge(int u, int v) {
         u = find(u); v = find(v);
         if(u == v) return;
         
         // 합칠 때 높이를 고려해서 더 깊이가 깊은 트리에 낮은 트리를 합쳐 주어
-        // 깊이가 더 깊어지는 것을 막는다. 왼쪽에 더 낮은걸 둔다.
-        if(rank[u] > rank[v]) swap(u, v);
-        parent[u] = v;
+        // 깊이가 더 깊어지는 것을 막는다. u에 더 낮은 그룹을 둔다.
+        if(rank[u] > rank[v]) swap(u, v);   // 만약 u가 더 큰 그룹 번호라면 바꿔준다.
+        parent[u] = v;  // 더 얕은 트리의 부모를 더 깊은 트리의 루트로 설정해준다.
         if(rank[u] == rank[v]) rank[v]++;
     }
 };
@@ -89,14 +94,13 @@ struct DisjointSet {
 ```c++
 unordered_map<long long, long long> map;
 int insert(int num) {
-    auto itr = map.find(num);
+
     if(map[num] == 0) {
         map[num] = num + 1;
         return num;
-    } else {
-        map[num] = insert(itr->second);
-        return map[num];
     }
+    auto itr = map.find(num);
+    return map[num] = insert(itr->second);
 }
 
 ```
