@@ -1,4 +1,4 @@
-# Quick Sort 평균 시간 복잡도 증명
+# Quick Sort 평균 시간 복잡도 귀납적 증명
 Qucik Sort의 평균 시간 복잡도가 O(nlogn)임을 증명하는 과정이다. <br>
 markdown 형식으로 표현하기 힘든 수식이 많아 직접 적어서 풀어낸 내용을 올린다.
 
