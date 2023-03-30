@@ -22,14 +22,15 @@
       value = arr[i];
 
       // i의 가장 왼쪽 부터 차례대로 훑는다.
-      for(int j = i - 1 ; j >= 0 ; j--){
+      int j = i - 1;
+      for(; j >= 0 ; j--){
           if(arr[j] > value){
               arr[j+1] = arr[j];
               continue;
           }
-          arr[j+1] = value;
           break;
       }
+      arr[j+1] = value; 
   }
 ```
 변수 j가 정의되는 가장 안 쪽의 for문을 보자. <Br>
@@ -39,5 +40,9 @@
 이후 내 자리를 찾으면! 그러니까, arr[j] \<= value인 j를 발견했다면, j의 바로 오른쪽이 이번에 고른 숫자 value의 올바른 위치가 되는 것이다. <br>
 따라서 arr[j+1]에 value를 넣고! 메서드를 종료하는 것이다.
 
+for문의 밖에서 value값을 대입해주는 이유는 만약 j == 0일때 if문의 조건을 만족한 경우, <Br>
+arr[1] 에 arr[0]의 값이 들어간 다음, arr[0]에 value값이 들어가야 하는데 <br>
+  그 처리를 편하게 해주기 위해서이다. <br>
+  
 ## Reference
 - me
