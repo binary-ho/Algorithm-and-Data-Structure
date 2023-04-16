@@ -16,7 +16,7 @@ Algorithm & Data-Structure
 ## 관련 레포지토리
 
 [백준, 프로그래머스 풀이 문항 코드 자동 저장 레포지토리](https://github.com/binary-ho/BaekjoonRecord) <br>
-<!--- [2학년 2학기 자료구조 수업 레포지토리 바로 가기](https://github.com/binary-ho/TIL-public/tree/main/3%ED%95%99%EB%85%84%202%ED%95%99%EA%B8%B0/Data%20Structure/Home%20works) --->
+[자료구조 수업 레포지토리](https://github.com/binary-ho/TIL-public/tree/main/3%ED%95%99%EB%85%84%202%ED%95%99%EA%B8%B0/Data%20Structure/Home%20works)
 
 <br/><br/>
 
