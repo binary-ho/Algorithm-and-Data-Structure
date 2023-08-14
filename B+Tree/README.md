@@ -1,5 +1,5 @@
 # B+Tree
-# 이 글 읽지말고 이거 읽자 -> [코드로 이해하는 B+Tree 연산 과정](https://github.com/binary-ho/Algorithm-and-Data-Structure/blob/main/B%2BTree/%EC%BD%94%EB%93%9C%EB%A1%9C%20%EC%9D%B4%ED%95%B4%ED%95%98%EB%8A%94%20B%2BTree%20%EC%97%B0%EC%82%B0%EA%B3%BC%EC%A0%95.md)
+# 이 글 읽지말고 이거 읽으세요 -> [코드로 이해하는 B+Tree 연산 과정](https://github.com/binary-ho/Algorithm-and-Data-Structure/blob/main/B%2BTree/%EC%BD%94%EB%93%9C%EB%A1%9C%20%EC%9D%B4%ED%95%B4%ED%95%98%EB%8A%94%20B%2BTree%20%EC%97%B0%EC%82%B0%EA%B3%BC%EC%A0%95.md)
 B+Tree는 DBMS에서 트리 기반 인덱싱에 사용하는 자료구조이다.
 트리 기반 인덱싱과 B+ Tree에 대한 기본 설명은 ~~[이곳을 참고]~~
 <!--- (https://github.com/binary-ho/TIL-public/blob/main/3%ED%95%99%EB%85%84%202%ED%95%99%EA%B8%B0/DB/10.%20%ED%8A%B8%EB%A6%AC%20%EA%B5%AC%EC%A1%B0%20%EC%9D%B8%EB%8D%B1%EC%8B%B1.md) --->
