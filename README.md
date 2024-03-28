@@ -8,6 +8,7 @@ Algorithm & Data-Structure
 
 ## 발표 영상
 - [A*와 Theta* 알고리즘](https://www.youtube.com/watch?v=eY1BTlvbCXA)
+- 위 발표 영상은 두 글을 기반으로 만들었습니다. [A* 알고리즘](https://github.com/binary-ho/Algorithm-and-Data-Structure/blob/main/graph/A%20Star%20Algorithm.md), [Theta* 알고리즘](https://github.com/binary-ho/Algorithm-and-Data-Structure/blob/main/graph/Theta%20Star%20Algorithm.md)
 
 ## 블로그 글
 - [코드로 이해하는 B+Tree 연산 과정](https://dwaejinho.tistory.com/entry/DB-BTree-%EC%9D%B4%EB%A1%A0%EA%B3%BC-%EC%BD%94%EB%93%9C%EB%A1%9C-%EB%8D%94-%EC%A0%9C%EB%8C%80%EB%A1%9C-%EC%9D%B4%ED%95%B4%ED%95%98%EA%B8%B0)
